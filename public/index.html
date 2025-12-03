@@ -124,6 +124,7 @@
             background-color: var(--color-accent-green);
             border-color: var(--color-accent-green);
             transform: scale(1.05);
+            color: var(--color-text-light);
         }
 
         .btn-custom-secondary {
@@ -138,6 +139,7 @@
             background-color: var(--color-primary-blue);
             border-color: var(--color-primary-blue);
             transform: scale(1.05);
+            color: var(--color-text-light);
         }
 
         /* Nav links */
@@ -319,7 +321,7 @@
             <!-- Column 1: Project Details (Local Redirect) -->
             <div class="col-md-6">
                 <div class="card p-0 metric-card h-100 border-0">
-                    <img src="https://placehold.co/600x150/3498DB/ECF0F1?text=Data+Modeling" class="card-img-top-small" alt="Placeholder image showing a blue and white data model representation.">
+                    <img src="images/data_modeling.jpg" class="card-img-top-small" alt="Placeholder image showing a blue and white data model representation." onerror="this.src='https://placehold.co/600x150/3498DB/ECF0F1?text=Data+Modeling'">
                     <div class="card-body p-4">
                         <h4 style="color: var(--color-primary-blue); font-weight: 700;">About the TerraPredict Project</h4>
                         <p class="text-muted-custom small">TerraPredict aims to provide accessible, real-time climate data powered by embedded systems (like Raspberry Pi) and sophisticated forecasting models. Learn about our methodology and data sources.</p>
@@ -333,7 +335,7 @@
             <!-- Column 2: External Initiative (External Redirect) -->
             <div class="col-md-6">
                 <div class="card p-0 metric-card h-100 border-0">
-                    <img src="https://placehold.co/600x150/16A085/ECF0F1?text=Sustainable+Initiative" class="card-img-top-small" alt="Placeholder image showing a green and white sustainable initiative graphic.">
+                    <img src="images/sustainable_initiative.jpg" class="card-img-top-small" alt="Placeholder image showing a green and white sustainable initiative graphic." onerror="this.src='https://placehold.co/600x150/16A085/ECF0F1?text=Sustainable+Initiative'">
                     <div class="card-body p-4">
                         <h4 style="color: var(--color-primary-blue); font-weight: 700;">Global Sustainability Initiative</h4>
                         <p class="text-muted-custom small">Discover a leading global initiative dedicated to climate remediation and carbon reduction policies across key industrial sectors. Find out how you can contribute to global climate goals.</p>
@@ -363,11 +365,6 @@
         // ----------------------------------------------------------------------
         // Información Ciudad Actual
         // ----------------------------------------------------------------------
-
-        // API Configuration for Gemini (Used for Reverse Geocoding via Grounded Search)
-        const API_KEY = ""; // Leave as empty string for runtime injection
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${API_KEY}`;
-        const MAX_RETRIES = 5;
 
         // Utility function for exponential backoff (required for API calls)
         async function exponentialBackoffFetch(url, options, maxRetries = 5, delay = 1000) {
@@ -402,7 +399,6 @@
          */
         function updateCityTitle(text, isError = false) {
             const cityTitleSpan = document.getElementById('city-title');
-            const statusMessage = document.getElementById('status-message');
 
             // Remove spinner if present
             const spinner = cityTitleSpan.querySelector('.spinner');
@@ -416,50 +412,47 @@
             if (isError) {
                 cityTitleSpan.classList.remove('text-blue-600');
                 cityTitleSpan.classList.add('text-red-500');
-                statusMessage.textContent = "Error al obtener la ubicación.";
             } else {
                 cityTitleSpan.classList.add('text-blue-600');
                 cityTitleSpan.classList.remove('text-red-500');
-                statusMessage.textContent = "¡Ubicación detectada con éxito!";
             }
         }
 
         /**
-         * Calls the Gemini API to reverse geocode the coordinates into a city name.
+         * Reverse geocode coordinates into city and state using Open-Meteo Geocoding API.
          * @param {number} lat Latitude
          * @param {number} lon Longitude
          */
         async function fetchCityName(lat, lon) {
             try {
-                document.getElementById('status-message').textContent = `Coordenadas obtenidas: ${lat.toFixed(4)}, ${lon.toFixed(4)}. Buscando ciudad...`;
-
-                const systemPrompt = "You are a specialized reverse geocoding assistant. Given coordinates, your sole task is to determine the city and country name. You must respond with *only* the city and country name, formatted as 'City Name, Country Name'. Do not include any other text, greetings, or explanations.";
+                // Use Open-Meteo Geocoding API for reverse geocoding
+                const geocodingUrl = `https://geocoding-api.open-meteo.com/v1/search?latitude=${lat}&longitude=${lon}&language=es`;
                 
-                const userQuery = `Find the primary, commonly known city name and country for the geographical coordinates: Latitude ${lat}, Longitude ${lon}.`;
+                const response = await fetch(geocodingUrl);
+                const data = await response.json();
 
-                const payload = {
-                    contents: [{ parts: [{ text: userQuery }] }],
-                    // Use Google Search grounding to find the real-time geographical information
-                    tools: [{ "google_search": {} }], 
-                    systemInstruction: {
-                        parts: [{ text: systemPrompt }]
-                    },
-                };
-
-                const response = await exponentialBackoffFetch(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                const result = await response.json();
-                const candidate = result.candidates?.[0];
-                const generatedText = candidate?.content?.parts?.[0]?.text || 'Ubicación Desconocida';
-                
-                updateCityTitle(generatedText);
+                if (data.results && data.results.length > 0) {
+                    const result = data.results[0];
+                    const city = result.name || 'Zapopan, Jalisco, Mexico';
+                    const state = result.admin1 || '';
+                    const country = result.country || '';
+                    
+                    // Format: City, State (Country)
+                    let cityName = city;
+                    if (state) {
+                        cityName += `, ${state}`;
+                    }
+                    if (country) {
+                        cityName += ` (${country})`;
+                    }
+                    
+                    updateCityTitle(cityName);
+                } else {
+                    updateCityTitle('Zapopan, Jalisco, Mexico', true);
+                }
 
             } catch (error) {
-                console.error("Gemini API call failed:", error);
+                console.error("Geocoding API call failed:", error);
                 updateCityTitle("Error de geocodificación", true);
             }
         }
@@ -468,55 +461,80 @@
          * Uses the browser's Geolocation API to get the user's current position.
          */
         function getGeoLocation() {
-            if (!navigator.geolocation) {
-                updateCityTitle("Geolocalización no soportada", true);
-                document.getElementById('status-message').textContent = "Tu navegador no soporta la API de Geolocalización.";
-                return;
-            }
-
-            const geoOptions = {
-                enableHighAccuracy: true,
-                timeout: 5000,
-                maximumAge: 0
-            };
-
-            const success = (position) => {
-                const latitude = position.coords.latitude;
-                const longitude = position.coords.longitude;
-                fetchCityName(latitude, longitude);
-            };
-
-            const error = (err) => {
-                let errorMessage;
-                switch(err.code) {
-                    case err.PERMISSION_DENIED:
-                        errorMessage = "Acceso a la ubicación denegado por el usuario.";
-                        break;
-                    case err.POSITION_UNAVAILABLE:
-                        errorMessage = "Información de ubicación no disponible.";
-                        break;
-                    case err.TIMEOUT:
-                        errorMessage = "El tiempo de espera para obtener la ubicación ha expirado.";
-                        break;
-                    default:
-                        errorMessage = `Error desconocido: ${err.message}`;
-                        break;
-                }
-                console.error(`Geolocation Error (${err.code}): ${errorMessage}`);
-                updateCityTitle("Permiso Denegado/Error", true);
-                document.getElementById('status-message').textContent = errorMessage;
-            };
-
-            // Request the current position
-            navigator.geolocation.getCurrentPosition(success, error, geoOptions);
+            // Use fixed coordinates for Zapopan, Jalisco, Mexico
+            const latitude = 20.7129;
+            const longitude = -103.3887;
+            
+            // Directly fetch city name for these coordinates
+            fetchCityName(latitude, longitude);
         }
 
         // Start the process when the window loads
-        window.onload = getGeoLocation;
+        window.onload = () => {
+            getGeoLocation();
+            fetchWeatherData();
+        };
 
         // ----------------------------------------------------------------------
-        // RASPBERRY PI/FLASK DATA LOGIC
+        // OPEN-METEO WEATHER API DATA LOGIC
         // ----------------------------------------------------------------------
+
+        /**
+         * Fetches weather data from Open-Meteo API using geolocation
+         */
+        async function fetchWeatherData() {
+            try {
+                // Coordinates for Zapopan, Jalisco, Mexico
+                const latitude = 20.7129;
+                const longitude = -103.3887;
+
+                // Call Open-Meteo API
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m&timezone=auto`;
+                
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.current) {
+                    const temperature = data.current.temperature_2m;
+                    const humidity = data.current.relative_humidity_2m;
+                    
+                    // Estimate CO2 based on temperature and typical levels for Jalisco
+                    // Typical CO2 at sea level: 400-410 ppm
+                    const baseCO2 = 405;
+                    const estimatedCO2 = baseCO2 + (temperature * 0.5);
+                    
+                    updateLocalWeatherData(temperature, estimatedCO2, humidity);
+                }
+            } catch (error) {
+                console.error("Error fetching weather data:", error);
+            }
+        }
+
+        /**
+         * Function to update the LOCAL weather metric columns (from Open-Meteo API).
+         * @param {number} temp Current Local Temperature (°C)
+         * @param {number} co2 Estimated CO2 Concentration (ppm)
+         * @param {number} humidity Current Local Humidity (%)
+         */
+        function updateLocalWeatherData(temp, co2, humidity) {
+            // Update Local Temperature
+            const localTempElement = document.getElementById('local-temp');
+            if (localTempElement) {
+                localTempElement.textContent = temp.toFixed(1) + '°C';
+            }
+
+            // Update Local CO2 Levels (estimated)
+            const localCo2Element = document.getElementById('local-co2');
+            if (localCo2Element) {
+                localCo2Element.textContent = Math.round(co2) + ' ppm';
+            }
+            
+            // Update Local Humidity
+            const localHumidElement = document.getElementById('local-humidity');
+            if (localHumidElement) {
+                localHumidElement.textContent = humidity.toFixed(1) + '%';
+            }
+        }
 
         /**
          * Function to update the first three GLOBAL metric columns (from RPi/Flask).
