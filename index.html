@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema A.D.E.M. 🌎</title>
+
+    <!-- Bootstrap CSS --><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        :root {
+            --color-bg-dark: #2C3E50; /* Background */
+            --color-card-dark: #34495E; /* Card Background */
+            --color-nav-dark: #233140; /* Navbar/Footer */
+            
+            --color-text-light: #ECF0F1; /* Main text */
+            --color-text-muted: #BDC3C7; /* Muted text */
+
+            --color-primary-blue: #3498DB; /* Main color */
+            --color-accent-green: #16A085; /* Accent color */
+
+            --color-alert-red: #FF7043;
+            
+            --font-main: 'Montserrat', sans-serif;
+            --font-data: 'Inconsolata', monospace;
+        }
+
+        body {
+            background-color: var(--color-bg-dark);
+            font-family: var(--font-main);
+            color: var(--color-text-light);
+            min-height: 100vh;
+        }
+
+        h2, h3, h4, h5, h6 {
+            font-family: var(--font-main);
+            font-weight: bold;
+            color: var(--color-text-light);
+        }
+
+        h1{
+            font-family: var(--font-main);
+            font-weight: bold;
+            color: var(--color-text-light);
+        }
+        
+        .navbar-custom {
+            background-color: var(--color-nav-dark);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-bg {
+            background: url('images/clouds_by_CHUTTERSNAP_unsplash.avif') no-repeat center center/cover;
+            background-position: center bottom;
+            padding: 5rem 0;
+            color: var(--color-text-light);
+            margin-bottom: 3rem;
+            position: relative;
+            text-align: center;
+        }
+        
+        .header-text-container {
+            background-color: rgba(35, 49, 64, 0.85);
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            display: inline-block;
+            backdrop-filter: blur(5px);
+        }
+
+        .header-bg h1 {
+            color: var(--color-primary-blue) !important; 
+            text-shadow: none;
+        }
+        .header-bg p {
+            color: var(--color-text-light) !important;
+            text-shadow: none;
+        }
+
+
+        .metric-card {
+            background-color: var(--color-card-dark);
+            border: 1px solid var(--color-primary-blue);
+            border-radius: 0.75rem;
+        }
+
+
+        .highlight-data {
+            font-family: var(--font-data);
+            color: var(--color-accent-green);
+            font-size: 2.5rem; 
+            font-weight: 700;
+            line-height: 1;
+        }
+        
+        .highlight-data-small {
+            font-family: var(--font-data);
+            color: var(--color-accent-green);
+            font-size: 1.5rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        
+        .text-muted-custom {
+            color: var(--color-text-muted) !important;
+        }
+
+        .btn-custom-primary {
+            background-color: var(--color-primary-blue);
+            color: var(--color-text-light);
+            border: 2px solid var(--color-primary-blue);
+            transition: background-color 0.3s, border-color 0.3s, transform 0.1s;
+            font-weight: 600;
+        }
+
+        .btn-custom-primary:hover {
+            background-color: var(--color-accent-green);
+            border-color: var(--color-accent-green);
+            transform: scale(1.05);
+        }
+
+        .btn-custom-secondary {
+            background-color: var(--color-accent-green);
+            color: var(--color-text-light);
+            border: 2px solid var(--color-accent-green);
+            transition: background-color 0.3s, border-color 0.3s, transform 0.1s;
+            font-weight: 600;
+        }
+
+        .btn-custom-secondary:hover {
+            background-color: var(--color-primary-blue);
+            border-color: var(--color-primary-blue);
+            transform: scale(1.05);
+        }
+
+        /* Nav links */
+        .nav-link-custom {
+            color: var(--color-text-light) !important;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-link-custom:hover {
+            color: var(--color-accent-green) !important;
+        }
+
+        /* Image for "Learn More" cards */
+        .card-img-top-small {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 0.75rem 0.75rem 0 0;
+            opacity: 0.85;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- 1. Navigation Bar --><nav class="navbar navbar-expand-lg navbar-dark navbar-custom py-3 sticky-top">
+        <div class="container-fluid container-lg">
+            <a class="navbar-brand text-uppercase" href="#" style="color: var(--color-primary-blue); font-weight: 700;">
+                <i class="bi bi-globe-americas me-2"></i>SISTEMA A.D.E.M.
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom active" aria-current="page" href="index.html">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" href="about.html">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. Header Section with Background Image --><header class="header-bg">
+        <div class="container-fluid container-lg">
+            <!-- Text container added for readability -->
+            <div class="header-text-container mx-auto">
+                <h1 class="display-5">Sistema A.D.E.M.</h1>
+                <p class="lead">Sistema de Análisis y Diagnóstico del Entorno Medioambiental</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="container-fluid container-lg pt-2 pb-5">
+        
+        <!-- 3. Five-Column Div (Current Status, Humidity, Local & Global Prediction) -->
+        <h2 class="h4 text-center mb-4 text-uppercase" style="color: var(--color-text-light);">Datos Actuales</h2>
+        
+        <!-- Row 1: Current Global Metrics (3 columns) -->
+        <div class="row g-4 mb-4">
+            
+            <!-- Column 1: Current Temperature (Global) -->
+            <div class="col-md-4">
+                <div class="p-4 metric-card text-center">
+                    <i class="bi bi-thermometer-high fs-2 mb-3" style="color: var(--color-primary-blue);"></i>
+                    <h3 class="h5 mb-3">Temperatura</h3>
+                    
+                    <div class="highlight-data mb-3">
+                        <span id="current-temp" style="color: var(--color-accent-green);">??°C</span>
+                    </div>
+                    
+                    <p class="small text-muted-custom mb-0">
+                        <i class="bi bi-graph-up me-1" style="color: var(--color-accent-green);"></i> La información no puede recuperarse actualmente. Revisa la conexión del Sistema A.D.E.M.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Column 2: Current CO2 Levels (Global) -->
+            <div class="col-md-4">
+                <div class="p-4 metric-card text-center">
+                    <i class="bi bi-cloud-haze2 fs-2 mb-3" style="color: var(--color-primary-blue);"></i>
+                    <h3 class="h5 mb-3">Nivel de CO2</h3>
+                    
+                    <div class="highlight-data mb-3">
+                        <span id="current-co2" style="color: var(--color-accent-green);">?? ppm</span>
+                    </div>
+                    
+                    <p class="small text-muted-custom mb-0">
+                        <i class="bi bi-exclamation-triangle-fill me-1" style="color: var(--color-alert-red);"></i> La información no puede recuperarse actualmente. Revisa la conexión del Sistema A.D.E.M.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Column 3: Current Humidity Levels (Global) -->
+            <div class="col-md-4">
+                <div class="p-4 metric-card text-center">
+                    <i class="bi bi-water fs-2 mb-3" style="color: var(--color-primary-blue);"></i>
+                    <h3 class="h5 mb-3">Humedad</h3>
+                    
+                    <div class="highlight-data mb-3">
+                        <span id="current-humidity" style="color: var(--color-accent-green);">??%</span>
+                    </div>
+                    
+                    <p class="small text-muted-custom mb-0">
+                        <i class="bi bi-cloud-rain me-1" style="color: var(--color-primary-blue);"></i> La información no puede recuperarse actualmente. Revisa la conexión del Sistema A.D.E.M.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Row 2: Local & Prediction Metrics (2 columns) -->
+        <div class="row g-4 mb-5 justify-content-center">
+            
+            <!-- Column 4: Current Local City Data (Internet Source) -->
+            <div class="col-md-6">
+                <div class="p-4 metric-card text-center h-100">
+                    <i class="bi bi-cloud-sun fs-2 mb-3" style="color: var(--color-primary-blue);"></i>
+                    <!-- City name updated by JavaScript -->
+                    <h3 class="h5 mb-3"><span id="city-title">Mi Ciudad (Cargando...)</span></h3> 
+                    
+                    <div class="row justify-content-center">
+                        <div class="col-4">
+                            <h4 class="small text-muted-custom">Temperatura</h4>
+                            <div class="highlight-data-small mb-3"><span id="local-temp">Cargando...</span></div>
+                        </div>
+                        <div class="col-4">
+                            <h4 class="small text-muted-custom">Nivel CO2</h4>
+                            <div class="highlight-data-small mb-3"><span id="local-co2">Cargando...</span></div>
+                        </div>
+                        <div class="col-4">
+                            <h4 class="small text-muted-custom">Humedad</h4>
+                            <div class="highlight-data-small mb-3"><span id="local-humidity">Cargando...</span></div>
+                        </div>
+                    </div>
+                    
+                    <p class="small text-muted-custom mb-0 mt-3">
+                        <i class="bi bi-cloud-sun me-1" style="color: var(--color-primary-blue);"></i> Data retrieved from local Internet weather source.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Column 5: Future Global Prediction (RPi/Flask Source) -->
+            <div class="col-md-6">
+                <div class="p-4 metric-card text-center h-100">
+                    <i class="bi bi-graph-up-arrow fs-2 mb-3" style="color: var(--color-primary-blue);"></i>
+                    <h3 class="h5 mb-3">Predicciones</h3>
+                    
+                    <div class="row justify-content-center">
+                        <div class="col-4">
+                            <h4 class="small text-muted-custom">Temperatura</h4>
+                            <div class="highlight-data-small mb-3"><span id="pred-temp">+??°C</span></div>
+                        </div>
+                        <div class="col-4">
+                            <h4 class="small text-muted-custom">Nivel CO2</h4>
+                            <div class="highlight-data-small mb-3"><span id="pred-co2">?? ppm</span></div>
+                        </div>
+                        <div class="col-4">
+                            <h4 class="small text-muted-custom">Humedad</h4>
+                            <div class="highlight-data-small mb-3"><span id="pred-humidity">??%</span></div>
+                        </div>
+                    </div>
+                    
+                    <p class="small text-muted-custom mb-0 mt-3">
+                        <i class="bi bi-speedometer2 me-1" style="color: var(--color-primary-blue);"></i> Projection based on current emission trajectories. Requires significant reduction.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+        
+        <!-- 4. Two-Column Div (Actions/Navigation) -->
+        <h2 class="h4 text-center mb-4 text-uppercase" style="color: var(--color-text-light);">Learn More</h2>
+        <div class="row g-4 justify-content-center">
+            
+            <!-- Column 1: Project Details (Local Redirect) -->
+            <div class="col-md-6">
+                <div class="card p-0 metric-card h-100 border-0">
+                    <img src="https://placehold.co/600x150/3498DB/ECF0F1?text=Data+Modeling" class="card-img-top-small" alt="Placeholder image showing a blue and white data model representation.">
+                    <div class="card-body p-4">
+                        <h4 style="color: var(--color-primary-blue); font-weight: 700;">About the TerraPredict Project</h4>
+                        <p class="text-muted-custom small">TerraPredict aims to provide accessible, real-time climate data powered by embedded systems (like Raspberry Pi) and sophisticated forecasting models. Learn about our methodology and data sources.</p>
+                        <a href="about.html" class="btn btn-custom-primary mt-2">
+                            <i class="bi bi-info-circle me-2"></i>Project Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 2: External Initiative (External Redirect) -->
+            <div class="col-md-6">
+                <div class="card p-0 metric-card h-100 border-0">
+                    <img src="https://placehold.co/600x150/16A085/ECF0F1?text=Sustainable+Initiative" class="card-img-top-small" alt="Placeholder image showing a green and white sustainable initiative graphic.">
+                    <div class="card-body p-4">
+                        <h4 style="color: var(--color-primary-blue); font-weight: 700;">Global Sustainability Initiative</h4>
+                        <p class="text-muted-custom small">Discover a leading global initiative dedicated to climate remediation and carbon reduction policies across key industrial sectors. Find out how you can contribute to global climate goals.</p>
+                        <a href="https://global-initiative.org" target="_blank" class="btn btn-custom-secondary mt-2">
+                            <i class="bi bi-arrow-up-right-square me-2"></i>Visit Initiative Website
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- 5. Footer --><footer class="mt-5 py-4 navbar-custom text-white">
+        <div class="container-fluid container-lg text-center">
+            <p class="mb-0 small" style="color: var(--color-text-light);">
+                &copy; 2025 TerraPredict | Climate Monitoring Project.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle --><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+    <script>
+
+        // ----------------------------------------------------------------------
+        // Información Ciudad Actual
+        // ----------------------------------------------------------------------
+
+        // API Configuration for Gemini (Used for Reverse Geocoding via Grounded Search)
+        const API_KEY = ""; // Leave as empty string for runtime injection
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${API_KEY}`;
+        const MAX_RETRIES = 5;
+
+        // Utility function for exponential backoff (required for API calls)
+        async function exponentialBackoffFetch(url, options, maxRetries = 5, delay = 1000) {
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.ok) {
+                        return response;
+                    } else if (response.status === 429 && i < maxRetries - 1) {
+                        // Rate limit error (429), wait and retry
+                        console.warn(`Rate limit hit (429). Retrying in ${delay / 1000}s...`);
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        delay *= 2; // Exponential increase
+                    } else {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                } catch (error) {
+                    if (i === maxRetries - 1) {
+                        throw error;
+                    }
+                    console.error(`Fetch failed on attempt ${i + 1}: ${error.message}. Retrying...`);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2;
+                }
+            }
+        }
+
+        /**
+         * Updates the UI element with the fetched city name or an error message.
+         * @param {string} text The text to display in the city title.
+         * @param {boolean} isError If true, applies error styling.
+         */
+        function updateCityTitle(text, isError = false) {
+            const cityTitleSpan = document.getElementById('city-title');
+            const statusMessage = document.getElementById('status-message');
+
+            // Remove spinner if present
+            const spinner = cityTitleSpan.querySelector('.spinner');
+            if (spinner) {
+                spinner.remove();
+            }
+
+            cityTitleSpan.textContent = text;
+            
+            // Update styling and secondary message
+            if (isError) {
+                cityTitleSpan.classList.remove('text-blue-600');
+                cityTitleSpan.classList.add('text-red-500');
+                statusMessage.textContent = "Error al obtener la ubicación.";
+            } else {
+                cityTitleSpan.classList.add('text-blue-600');
+                cityTitleSpan.classList.remove('text-red-500');
+                statusMessage.textContent = "¡Ubicación detectada con éxito!";
+            }
+        }
+
+        /**
+         * Calls the Gemini API to reverse geocode the coordinates into a city name.
+         * @param {number} lat Latitude
+         * @param {number} lon Longitude
+         */
+        async function fetchCityName(lat, lon) {
+            try {
+                document.getElementById('status-message').textContent = `Coordenadas obtenidas: ${lat.toFixed(4)}, ${lon.toFixed(4)}. Buscando ciudad...`;
+
+                const systemPrompt = "You are a specialized reverse geocoding assistant. Given coordinates, your sole task is to determine the city and country name. You must respond with *only* the city and country name, formatted as 'City Name, Country Name'. Do not include any other text, greetings, or explanations.";
+                
+                const userQuery = `Find the primary, commonly known city name and country for the geographical coordinates: Latitude ${lat}, Longitude ${lon}.`;
+
+                const payload = {
+                    contents: [{ parts: [{ text: userQuery }] }],
+                    // Use Google Search grounding to find the real-time geographical information
+                    tools: [{ "google_search": {} }], 
+                    systemInstruction: {
+                        parts: [{ text: systemPrompt }]
+                    },
+                };
+
+                const response = await exponentialBackoffFetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+                const generatedText = candidate?.content?.parts?.[0]?.text || 'Ubicación Desconocida';
+                
+                updateCityTitle(generatedText);
+
+            } catch (error) {
+                console.error("Gemini API call failed:", error);
+                updateCityTitle("Error de geocodificación", true);
+            }
+        }
+
+        /**
+         * Uses the browser's Geolocation API to get the user's current position.
+         */
+        function getGeoLocation() {
+            if (!navigator.geolocation) {
+                updateCityTitle("Geolocalización no soportada", true);
+                document.getElementById('status-message').textContent = "Tu navegador no soporta la API de Geolocalización.";
+                return;
+            }
+
+            const geoOptions = {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            };
+
+            const success = (position) => {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+                fetchCityName(latitude, longitude);
+            };
+
+            const error = (err) => {
+                let errorMessage;
+                switch(err.code) {
+                    case err.PERMISSION_DENIED:
+                        errorMessage = "Acceso a la ubicación denegado por el usuario.";
+                        break;
+                    case err.POSITION_UNAVAILABLE:
+                        errorMessage = "Información de ubicación no disponible.";
+                        break;
+                    case err.TIMEOUT:
+                        errorMessage = "El tiempo de espera para obtener la ubicación ha expirado.";
+                        break;
+                    default:
+                        errorMessage = `Error desconocido: ${err.message}`;
+                        break;
+                }
+                console.error(`Geolocation Error (${err.code}): ${errorMessage}`);
+                updateCityTitle("Permiso Denegado/Error", true);
+                document.getElementById('status-message').textContent = errorMessage;
+            };
+
+            // Request the current position
+            navigator.geolocation.getCurrentPosition(success, error, geoOptions);
+        }
+
+        // Start the process when the window loads
+        window.onload = getGeoLocation;
+
+        // ----------------------------------------------------------------------
+        // RASPBERRY PI/FLASK DATA LOGIC
+        // ----------------------------------------------------------------------
+
+        /**
+         * Function to update the first three GLOBAL metric columns (from RPi/Flask).
+         * @param {number} temp Current Global Average Temperature (°C)
+         * @param {number} co2 Current CO2 Concentration (ppm)
+         * @param {number} humidity Current Global Average Humidity (%)
+         */
+        function updateGlobalData(temp, co2, humidity) {
+            // Update Current Temperature (Global)
+            const currentTempElement = document.getElementById('current-temp');
+            if (currentTempElement) {
+                currentTempElement.textContent = temp.toFixed(1) + '°C';
+                // Highlight red if above 16.0°C (arbitrary warming threshold)
+                currentTempElement.style.color = temp > 16.0 ? '#FF7043' : 'var(--color-accent-green)';
+            }
+
+            // Update Current CO2 Levels (Global)
+            const currentCo2Element = document.getElementById('current-co2');
+            if (currentCo2Element) {
+                currentCo2Element.textContent = Math.round(co2) + ' ppm';
+                // Highlight red if above 420 ppm
+                currentCo2Element.style.color = co2 > 420 ? '#FF7043' : 'var(--color-accent-green)';
+            }
+            
+            // Update Current Humidity (Global)
+            const currentHumidElement = document.getElementById('current-humidity');
+            if (currentHumidElement) {
+                currentHumidElement.textContent = humidity.toFixed(1) + '%';
+            }
+        }
+
+        /**
+         * Function to update the Future Prediction Data (from RPi/Flask).
+         * @param {number} predTemp 2050 Predicted Temperature Rise (°C)
+         * @param {number} predCo2 2050 Predicted CO2 Concentration (ppm)
+         * @param {number} predHumidity 2050 Predicted Humidity (%)
+         */
+        function updatePredictionData(predTemp, predCo2, predHumidity) {
+            // Update Predicted Data (Column 5)
+            document.getElementById('pred-temp').textContent = (predTemp > 0 ? '+' : '') + predTemp.toFixed(1) + '°C'; 
+            document.getElementById('pred-co2').textContent = Math.round(predCo2) + ' ppm';
+            document.getElementById('pred-humidity').textContent = Math.round(predHumidity) + '%';
+        }
+        
+        // Initial Dummy Data Calls (RPi/Flask Data)
+        updateGlobalData(15.2, 421, 65.0);
+        updatePredictionData(2.5, 480, 71);
+
+    </script>
+
+</body>
+</html>
